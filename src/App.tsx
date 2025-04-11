@@ -7,7 +7,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Results from "./pages/Results";
 import NotFound from "./pages/NotFound";
+import Login from "./pages/Login";
 import AIAssistant from "./components/AIAssistant";
+import SiteOverview from "./components/SiteOverview";
 
 const queryClient = new QueryClient();
 
@@ -17,9 +19,11 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <SiteOverview />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/results" element={<Results />} />
+          <Route path="/login" element={<Login />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <AIAssistant />

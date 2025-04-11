@@ -1,12 +1,11 @@
 
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { Loader2, ArrowLeft, ExternalLink, RefreshCw } from 'lucide-react';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from "@/components/ui/use-toast";
+import { RefreshCw, GithubIcon, Linkedin, FileText, Trophy, Award, CheckCircle } from "lucide-react";
+import BackButton from "@/components/BackButton";
 
 interface ResumeData {
   name: string;
@@ -18,257 +17,284 @@ interface ResumeData {
 }
 
 const Results = () => {
-  const navigate = useNavigate();
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(true);
-  const [resumeData, setResumeData] = useState<ResumeData | null>(null);
+  const [data, setData] = useState<ResumeData | null>(null);
+  const [loading, setLoading] = useState(true);
   const [sendToRecruiters, setSendToRecruiters] = useState(false);
-  const [linkedInConsent, setLinkedInConsent] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [consentToLinkedIn, setConsentToLinkedIn] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   
+  // Mock scores for the demo
+  const scores = {
+    overall: 82,
+    format: 90,
+    content: 75,
+    keywords: 85,
+    recommendations: [
+      "Add more quantifiable achievements",
+      "Improve your skills section with more relevant technologies",
+      "Include a stronger professional summary"
+    ]
+  };
+
   useEffect(() => {
-    // In a real application, we would fetch data from the API here
-    // For this demo, we'll use the data from localStorage
+    // In a real app, we would fetch data from the API
+    // For now, we'll get it from localStorage
     const fetchData = async () => {
       try {
-        // Simulate API call delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
         const storedData = localStorage.getItem('resumeData');
         if (storedData) {
-          setResumeData(JSON.parse(storedData));
-        } else {
-          // If no data is found, redirect to the form
-          toast({
-            title: "No resume data found",
-            description: "Please submit your resume first.",
-            variant: "destructive"
-          });
-          navigate('/');
+          setData(JSON.parse(storedData));
         }
       } catch (error) {
         console.error('Error fetching data:', error);
         toast({
           title: "Error",
-          description: "Failed to load resume data. Please try again.",
+          description: "Could not load resume data. Please try again.",
           variant: "destructive"
         });
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     };
-    
+
     fetchData();
-  }, [navigate, toast]);
-  
-  const handleSubmit = async () => {
-    setIsSubmitting(true);
+  }, [toast]);
+
+  const handleSubmit = () => {
+    setRefreshing(true);
     
-    try {
-      // In a real application, this would send the preferences to your API
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+    // Simulate API call
+    setTimeout(() => {
       toast({
-        title: "Preferences Saved",
-        description: `Your preferences have been updated. ${sendToRecruiters ? "Your resume will be shared with recruiters." : "Your resume will not be shared with recruiters."} ${linkedInConsent ? "LinkedIn evaluation is enabled." : "LinkedIn evaluation is disabled."}`,
+        title: "Preferences Updated",
+        description: sendToRecruiters 
+          ? "Your resume will be shared with recruiters." 
+          : "Your preferences have been saved.",
+        variant: "default"
       });
-      
-      // Refresh the page by refetching data
-      setIsLoading(true);
-      await new Promise(resolve => setTimeout(resolve, 500));
-      setIsLoading(false);
-      
-    } catch (error) {
-      console.error('Error submitting preferences:', error);
-      toast({
-        title: "Error",
-        description: "Failed to save preferences. Please try again.",
-        variant: "destructive"
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
+      setRefreshing(false);
+    }, 1500);
   };
-  
-  if (isLoading) {
+
+  if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center">
-        <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-        <p className="text-lg">Loading resume data...</p>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+        <div className="text-center">
+          <div className="inline-block p-4 bg-background rounded-full mb-4">
+            <RefreshCw className="h-8 w-8 animate-spin text-primary" />
+          </div>
+          <h2 className="text-xl font-semibold mb-2">Loading Results</h2>
+          <p className="text-muted-foreground">Please wait while we load your resume analysis...</p>
+        </div>
       </div>
     );
   }
-  
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/30 py-12 px-4">
-      <div className="max-w-4xl mx-auto">
-        <Button 
-          variant="ghost" 
-          onClick={() => navigate('/')}
-          className="mb-6"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Form
-        </Button>
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5 py-12 px-4">
+      <div className="max-w-5xl mx-auto">
+        <div className="mb-6">
+          <BackButton />
+        </div>
         
-        <div className="fade-in text-center mb-8">
-          <h1 className="text-4xl font-bold text-primary mb-2">Resume Analysis Results</h1>
-          <p className="text-lg text-muted-foreground">
-            Review your resume insights and set your preferences
+        <div className="fade-in text-center mb-12">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-violet-600 bg-clip-text text-transparent mb-2">
+            Resume Analysis Results
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Here's what our AI found in your resume. Use these insights to improve your chances of landing your dream job.
           </p>
         </div>
         
-        {resumeData && (
-          <div className="space-y-6">
-            <div className="bg-card shadow-custom rounded-xl p-8 slide-in">
-              <h2 className="text-2xl font-semibold mb-4">Resume Overview</h2>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="text-lg font-medium text-primary mb-2">Personal Information</h3>
-                  <div className="space-y-2">
-                    <p><span className="font-medium">Name:</span> {resumeData.name}</p>
-                    <p><span className="font-medium">Email:</span> {resumeData.email}</p>
-                    <p><span className="font-medium">Phone:</span> {resumeData.phone}</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <Card className="slide-in shadow-lg border border-border/40 bg-white/95 backdrop-blur-sm">
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center gap-2">
+                <Trophy className="h-5 w-5 text-amber-500" />
+                Overall Score
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="text-center">
+              <div className="flex items-center justify-center">
+                <div className="relative w-32 h-32">
+                  <div className="absolute inset-0 flex items-center justify-center font-bold text-4xl">
+                    {scores.overall}%
                   </div>
-                </div>
-                
-                <div>
-                  <h3 className="text-lg font-medium text-primary mb-2">Online Profiles</h3>
-                  <div className="space-y-3">
-                    <div className="flex items-center">
-                      <span className="font-medium mr-2">LinkedIn:</span>
-                      <a 
-                        href={resumeData.linkedin} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:underline flex items-center"
-                      >
-                        {resumeData.linkedin.replace(/^https?:\/\/(www\.)?/i, '')}
-                        <ExternalLink className="ml-1 h-3 w-3" />
-                      </a>
-                    </div>
-                    <div className="flex items-center">
-                      <span className="font-medium mr-2">GitHub:</span>
-                      <a 
-                        href={resumeData.github} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:underline flex items-center"
-                      >
-                        {resumeData.github.replace(/^https?:\/\/(www\.)?/i, '')}
-                        <ExternalLink className="ml-1 h-3 w-3" />
-                      </a>
-                    </div>
-                  </div>
+                  <svg className="w-full h-full" viewBox="0 0 36 36">
+                    <path
+                      d="M18 2.0845
+                        a 15.9155 15.9155 0 0 1 0 31.831
+                        a 15.9155 15.9155 0 0 1 0 -31.831"
+                      fill="none"
+                      stroke="#eee"
+                      strokeWidth="2"
+                    />
+                    <path
+                      d="M18 2.0845
+                        a 15.9155 15.9155 0 0 1 0 31.831
+                        a 15.9155 15.9155 0 0 1 0 -31.831"
+                      fill="none"
+                      stroke="#4f46e5"
+                      strokeWidth="2"
+                      strokeDasharray={`${scores.overall}, 100`}
+                      strokeLinecap="round"
+                    />
+                  </svg>
                 </div>
               </div>
-              
-              <Separator className="my-6" />
-              
-              <div>
-                <h3 className="text-lg font-medium text-primary mb-4">Parsed Resume Text</h3>
-                <div className="bg-secondary/50 p-4 rounded-md h-48 overflow-y-auto">
-                  <p className="whitespace-pre-line">{resumeData.resumeText}</p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="bg-card shadow-custom rounded-xl p-8 slide-in">
-              <h2 className="text-2xl font-semibold mb-4">AI Resume Analysis</h2>
-              
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-lg font-medium text-primary mb-3">Key Strengths</h3>
-                  <ul className="list-disc list-inside space-y-2 ml-2">
-                    <li>Strong technical skills demonstrated through GitHub projects</li>
-                    <li>Clear and concise presentation of experience</li>
-                    <li>Good balance of technical and soft skills</li>
-                  </ul>
-                </div>
-                
-                <div>
-                  <h3 className="text-lg font-medium text-primary mb-3">Improvement Areas</h3>
-                  <ul className="list-disc list-inside space-y-2 ml-2">
-                    <li>Add more quantifiable achievements to highlight impact</li>
-                    <li>Consider reorganizing sections to emphasize most relevant experience</li>
-                    <li>Include more industry-specific keywords to improve ATS compatibility</li>
-                  </ul>
-                </div>
-                
-                <div>
-                  <h3 className="text-lg font-medium text-primary mb-3">ATS Compatibility Score</h3>
-                  <div className="relative h-4 w-full bg-secondary rounded-full overflow-hidden">
-                    <div className="absolute top-0 left-0 h-full bg-primary" style={{ width: '78%' }}></div>
-                  </div>
-                  <p className="text-sm text-muted-foreground mt-2">Your resume is 78% compatible with common ATS systems</p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="bg-card shadow-custom rounded-xl p-8 slide-in">
-              <h2 className="text-2xl font-semibold mb-6">Preferences</h2>
-              
-              <div className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <Checkbox
-                    id="send-to-recruiters"
-                    checked={sendToRecruiters}
-                    onCheckedChange={(checked) => setSendToRecruiters(checked as boolean)}
-                  />
-                  <div className="space-y-1 leading-none">
-                    <Label
-                      htmlFor="send-to-recruiters"
-                      className="text-base font-medium cursor-pointer"
-                    >
-                      Share resume with job recruiters
-                    </Label>
-                    <p className="text-sm text-muted-foreground">
-                      Allow us to share your resume with our network of vetted recruiters in your field
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-3">
-                  <Checkbox
-                    id="linkedin-consent"
-                    checked={linkedInConsent}
-                    onCheckedChange={(checked) => setLinkedInConsent(checked as boolean)}
-                  />
-                  <div className="space-y-1 leading-none">
-                    <Label
-                      htmlFor="linkedin-consent"
-                      className="text-base font-medium cursor-pointer"
-                    >
-                      Evaluate LinkedIn profile
-                    </Label>
-                    <p className="text-sm text-muted-foreground">
-                      Allow our AI to analyze your LinkedIn profile for additional optimization insights
-                    </p>
-                  </div>
-                </div>
-              </div>
-              
-              <Button 
-                onClick={handleSubmit} 
-                className="mt-6 w-full"
-                disabled={isSubmitting}
+            </CardContent>
+          </Card>
+          
+          <Card className="slide-in shadow-lg border border-border/40 bg-white/95 backdrop-blur-sm animation-delay-100">
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center gap-2">
+                <GithubIcon className="h-5 w-5 text-slate-700" />
+                GitHub Profile
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <a 
+                href={data?.github || "#"} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-primary hover:underline flex items-center gap-2"
               >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Saving preferences...
-                  </>
-                ) : (
-                  <>
-                    <RefreshCw className="mr-2 h-4 w-4" />
-                    Save Preferences
-                  </>
-                )}
-              </Button>
+                {data?.github || "Not provided"}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-external-link">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                  <polyline points="15 3 21 3 21 9"/>
+                  <line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
+              </a>
+            </CardContent>
+          </Card>
+          
+          <Card className="slide-in shadow-lg border border-border/40 bg-white/95 backdrop-blur-sm animation-delay-200">
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center gap-2">
+                <Linkedin className="h-5 w-5 text-blue-600" />
+                LinkedIn Profile
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <a 
+                href={data?.linkedin || "#"} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-primary hover:underline flex items-center gap-2"
+              >
+                {data?.linkedin || "Not provided"}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-external-link">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                  <polyline points="15 3 21 3 21 9"/>
+                  <line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
+              </a>
+            </CardContent>
+          </Card>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <Card className="shadow-lg border border-border/40 bg-white/95 backdrop-blur-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5 text-blue-500" />
+                Resume Content
+              </CardTitle>
+              <CardDescription>Extracted from your uploaded resume</CardDescription>
+            </CardHeader>
+            <CardContent className="max-h-60 overflow-y-auto custom-scrollbar">
+              <p className="whitespace-pre-wrap text-sm">{data?.resumeText || "No resume content available"}</p>
+            </CardContent>
+          </Card>
+          
+          <Card className="shadow-lg border border-border/40 bg-white/95 backdrop-blur-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Award className="h-5 w-5 text-emerald-500" />
+                Recommendations
+              </CardTitle>
+              <CardDescription>Ways to improve your resume</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-2">
+                {scores.recommendations.map((rec, index) => (
+                  <li key={index} className="flex items-start gap-2">
+                    <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                    <span>{rec}</span>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+        </div>
+        
+        <Card className="mb-8 shadow-lg border border-border/40 bg-white/95 backdrop-blur-sm">
+          <CardHeader>
+            <CardTitle>Preferences</CardTitle>
+            <CardDescription>Choose how you'd like to use your resume data</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-start space-x-2">
+              <Checkbox 
+                id="recruiters" 
+                checked={sendToRecruiters}
+                onCheckedChange={(checked) => {
+                  if (typeof checked === 'boolean') {
+                    setSendToRecruiters(checked);
+                  }
+                }}
+              />
+              <div className="grid gap-1.5 leading-none">
+                <label
+                  htmlFor="recruiters"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Share resume with recruiters
+                </label>
+                <p className="text-sm text-muted-foreground">
+                  Allow our partner recruiters to contact you about relevant job opportunities
+                </p>
+              </div>
             </div>
-          </div>
-        )}
+            
+            <div className="flex items-start space-x-2">
+              <Checkbox 
+                id="linkedin" 
+                checked={consentToLinkedIn}
+                onCheckedChange={(checked) => {
+                  if (typeof checked === 'boolean') {
+                    setConsentToLinkedIn(checked);
+                  }
+                }}
+              />
+              <div className="grid gap-1.5 leading-none">
+                <label
+                  htmlFor="linkedin"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  LinkedIn analysis
+                </label>
+                <p className="text-sm text-muted-foreground">
+                  Allow us to analyze your LinkedIn profile for additional insights
+                </p>
+              </div>
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button onClick={handleSubmit} disabled={refreshing}>
+              {refreshing ? (
+                <>
+                  <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                  Updating...
+                </>
+              ) : (
+                "Save Preferences"
+              )}
+            </Button>
+          </CardFooter>
+        </Card>
       </div>
     </div>
   );
