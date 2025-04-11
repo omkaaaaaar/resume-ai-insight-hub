@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -143,6 +144,18 @@
   }
 }
 
+@keyframes textGlow {
+  0% {
+    text-shadow: 0 0 5px rgba(124, 58, 237, 0.5), 0 0 15px rgba(124, 58, 237, 0.3);
+  }
+  50% {
+    text-shadow: 0 0 10px rgba(124, 58, 237, 0.8), 0 0 25px rgba(124, 58, 237, 0.5), 0 0 40px rgba(124, 58, 237, 0.3);
+  }
+  100% {
+    text-shadow: 0 0 5px rgba(124, 58, 237, 0.5), 0 0 15px rgba(124, 58, 237, 0.3);
+  }
+}
+
 .fade-in {
   animation: fadeIn 0.6s ease-out;
 }
@@ -169,6 +182,11 @@
   animation: shimmer 2s infinite;
 }
 
+.text-gradient-glow {
+  @apply bg-gradient-to-r from-indigo-400 via-violet-400 to-purple-500 bg-clip-text text-transparent font-bold;
+  animation: textGlow 3s ease-in-out infinite;
+}
+
 .animation-delay-100 {
   animation-delay: 0.1s;
 }
@@ -186,6 +204,11 @@
   backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.dark .glass-card {
+  background: rgba(20, 20, 30, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .text-gradient {
@@ -228,6 +251,10 @@
   background: linear-gradient(to right, #f8fafc, #eef2ff);
 }
 
+.dark .gradient-background {
+  background: linear-gradient(to right, #0f1729, #1e1b4b);
+}
+
 .premium-border {
   @apply border border-primary/10 hover:border-primary/30 transition-colors;
 }
@@ -255,6 +282,10 @@
   transition: opacity 0.5s ease;
 }
 
+.dark .spotlight::before {
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+}
+
 .spotlight:hover::before {
   opacity: 1;
 }
@@ -264,7 +295,26 @@
   box-shadow: 0 4px 20px -5px rgba(79, 70, 229, 0.08);
 }
 
+.dark .premium-card {
+  @apply bg-gray-900 border-white/10;
+  box-shadow: 0 4px 20px -5px rgba(124, 58, 237, 0.15);
+}
+
 .premium-card:hover {
   box-shadow: 0 10px 30px -5px rgba(79, 70, 229, 0.15);
   transform: translateY(-3px);
+}
+
+.dark .premium-card:hover {
+  box-shadow: 0 10px 30px -5px rgba(124, 58, 237, 0.25);
+}
+
+.card-gradient {
+  @apply bg-gradient-to-br from-white to-secondary/50 backdrop-blur-sm;
+  box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.1);
+}
+
+.dark .card-gradient {
+  @apply bg-gradient-to-br from-gray-900 to-gray-800/80 backdrop-blur-sm;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
 }
