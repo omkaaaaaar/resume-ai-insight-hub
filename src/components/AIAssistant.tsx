@@ -10,7 +10,7 @@ import {
   DialogFooter
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { MessageCircle, Send, X, ChevronUp, ChevronDown } from 'lucide-react';
+import { Bot, Send, X, ChevronUp, ChevronDown, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface Message {
@@ -114,17 +114,19 @@ const AIAssistant = () => {
       {isOpen ? (
         <div 
           className={cn(
-            "fixed bottom-6 right-6 bg-card shadow-custom rounded-xl overflow-hidden transition-all duration-300 z-50",
+            "fixed bottom-6 right-6 bg-card shadow-xl rounded-xl overflow-hidden transition-all duration-300 z-50 border border-primary/10",
             isMinimized ? "w-72 h-16" : "w-80 sm:w-96 h-[500px]"
           )}
         >
-          <div className="flex items-center justify-between bg-primary p-3">
+          <div className="flex items-center justify-between bg-gradient-to-r from-primary to-primary/80 p-3">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 rounded-full bg-primary-foreground flex items-center justify-center">
-                <MessageCircle size={18} className="text-primary" />
+              <div className="w-8 h-8 rounded-full bg-primary-foreground flex items-center justify-center animate-pulse">
+                <Bot size={18} className="text-primary" />
               </div>
               <div>
-                <h3 className="font-medium text-primary-foreground">Resume Assistant</h3>
+                <h3 className="font-medium text-primary-foreground flex items-center gap-1">
+                  Resume AI <Sparkles size={14} className="text-yellow-300" />
+                </h3>
               </div>
             </div>
             <div className="flex space-x-1">
@@ -132,7 +134,7 @@ const AIAssistant = () => {
                 variant="ghost" 
                 size="icon" 
                 onClick={toggleMinimize}
-                className="h-8 w-8 hover:bg-primary-foreground/20 text-primary-foreground"
+                className="h-8 w-8 hover:bg-primary-foreground/20 text-primary-foreground transition-transform hover:scale-110"
               >
                 {isMinimized ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
               </Button>
@@ -140,7 +142,7 @@ const AIAssistant = () => {
                 variant="ghost" 
                 size="icon" 
                 onClick={toggleChatbot}
-                className="h-8 w-8 hover:bg-primary-foreground/20 text-primary-foreground"
+                className="h-8 w-8 hover:bg-primary-foreground/20 text-primary-foreground transition-transform hover:scale-110"
               >
                 <X size={18} />
               </Button>
@@ -149,7 +151,7 @@ const AIAssistant = () => {
           
           {!isMinimized && (
             <>
-              <div className="flex-1 p-4 h-[404px] overflow-y-auto">
+              <div className="flex-1 p-4 h-[404px] overflow-y-auto bg-gradient-to-b from-background to-secondary/5 custom-scrollbar">
                 <div className="space-y-4">
                   {messages.map((msg) => (
                     <div 
@@ -161,10 +163,10 @@ const AIAssistant = () => {
                     >
                       <div 
                         className={cn(
-                          "max-w-[80%] px-4 py-2 rounded-lg",
+                          "max-w-[80%] px-4 py-2 rounded-lg shadow-sm",
                           msg.sender === 'user' 
                             ? "bg-primary text-primary-foreground" 
-                            : "bg-secondary text-secondary-foreground"
+                            : "bg-white border border-border/30 text-secondary-foreground"
                         )}
                       >
                         <p className="text-sm">{msg.text}</p>
@@ -178,15 +180,20 @@ const AIAssistant = () => {
                 </div>
               </div>
               
-              <form onSubmit={handleSendMessage} className="p-3 border-t">
+              <form onSubmit={handleSendMessage} className="p-3 border-t bg-background/80 backdrop-blur-sm">
                 <div className="flex space-x-2">
                   <Input
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="Type your message..."
-                    className="flex-1"
+                    className="flex-1 border-primary/20 focus-visible:ring-primary/30"
                   />
-                  <Button type="submit" size="icon" disabled={!message.trim()}>
+                  <Button 
+                    type="submit" 
+                    size="icon" 
+                    disabled={!message.trim()}
+                    className="bg-primary hover:bg-primary/90 transition-transform hover:scale-105"
+                  >
                     <Send size={18} />
                   </Button>
                 </div>
@@ -196,11 +203,12 @@ const AIAssistant = () => {
         </div>
       ) : (
         <Button
+          id="ai-assistant-button"
           onClick={toggleChatbot}
-          className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg"
+          className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg bg-primary hover:bg-primary/90 transition-transform hover:scale-105 border border-primary/20"
           size="icon"
         >
-          <MessageCircle size={24} />
+          <Bot size={24} />
         </Button>
       )}
     </>
