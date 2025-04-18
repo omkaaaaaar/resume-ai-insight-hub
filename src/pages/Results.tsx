@@ -24,16 +24,18 @@ const Results = () => {
   const [consentToLinkedIn, setConsentToLinkedIn] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   
-  // Mock scores for the demo
+  // Updated scores and recommendations
   const scores = {
-    overall: 82,
-    format: 90,
-    content: 75,
-    keywords: 85,
+    overall: 87,
+    format: 92,
+    content: 85,
+    keywords: 89,
     recommendations: [
-      "Add more quantifiable achievements",
-      "Improve your skills section with more relevant technologies",
-      "Include a stronger professional summary"
+      "Consider adding specific metrics to quantify your achievements",
+      "Highlight leadership experiences with concrete examples",
+      "Include certifications and professional development activities",
+      "Enhance your technical skills section with emerging technologies",
+      "Add a brief professional summary to showcase your career objectives"
     ]
   };
 
@@ -99,11 +101,11 @@ const Results = () => {
         </div>
         
         <div className="fade-in text-center mb-12">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-violet-600 bg-clip-text text-transparent mb-2">
-            Resume Analysis Results
+          <h1 className="text-4xl font-bold text-gradient-glow mb-2">
+            ResumeLens.AI Analysis Results
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Here's what our AI found in your resume. Use these insights to improve your chances of landing your dream job.
+            Our AI has analyzed your resume. Here's a detailed breakdown of your professional profile.
           </p>
         </div>
         
