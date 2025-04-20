@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useToast } from "@/components/ui/use-toast";
-import { RefreshCw, GithubIcon, Linkedin, FileText, Trophy, Award, CheckCircle } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { RefreshCw, GithubIcon, Linkedin, FileText, Trophy, Award, Mail } from "lucide-react";
 import BackButton from "@/components/BackButton";
 
 interface ResumeData {
@@ -23,7 +23,8 @@ const Results = () => {
   const [consentToLinkedIn, setConsentToLinkedIn] = useState(false);
   const [showCompanies, setShowCompanies] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  
+  const [selectedCompanies, setSelectedCompanies] = useState<string[]>([]);
+
   const scores = {
     overall: 87,
     format: 92,
@@ -34,6 +35,32 @@ const Results = () => {
       "Build real-world data dashboards",
       "Improve backend knowledge for full-stack capabilities"
     ]
+  };
+
+  const companies = [
+    { name: "TCS", location: "Navi Mumbai", role: "Data Analyst" },
+    { name: "Wipro", location: "Gurgaon", role: "Frontend Developer" },
+    { name: "Infosys", location: "Pune", role: "Backend Developer" }
+  ];
+
+  const handleCompanySelect = (companyName: string) => {
+    setSelectedCompanies(prev => {
+      if (prev.includes(companyName)) {
+        return prev.filter(name => name !== companyName);
+      }
+      return [...prev, companyName];
+    });
+  };
+
+  const handleSendEmail = () => {
+    if (selectedCompanies.length > 0) {
+      toast({
+        title: "Email Sent Successfully",
+        description: `Your resume has been sent to ${selectedCompanies.join(", ")}`,
+        variant: "default",
+      });
+      setSelectedCompanies([]);
+    }
   };
 
   useEffect(() => {
@@ -73,13 +100,6 @@ const Results = () => {
     }, 1500);
   };
 
-  const getMatchingCompanies = () => {
-    const companies = [];
-    companies.push({ name: "TCS", location: "Navi Mumbai", role: "Data Analyst" });
-    companies.push({ name: "Wipro", location: "Gurgaon", role: "Frontend Developer" });
-    return companies;
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/5">
@@ -101,7 +121,7 @@ const Results = () => {
           <BackButton />
         </div>
         
-        <div className="fade-in text-center mb-12">
+        <div className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-2">
             Resume Analysis Results
           </h1>
@@ -209,15 +229,13 @@ const Results = () => {
             </CardHeader>
             <CardContent className="max-h-60 overflow-y-auto custom-scrollbar">
               <p className="whitespace-pre-wrap text-sm">
-                <span className="font-bold">💯 Overall Score: 87%</span>
-
-                <span className="font-bold">🛠️ Core Skills:</span>
+                <span className="font-bold">Core Skills:</span>
                 Omkar is skilled in React, JavaScript, TypeScript, Tailwind CSS, and Python, making him a strong frontend candidate. He also holds relevant data skills like MongoDB, Power BI, NumPy, and Pandas, suitable for entry-level Data Analyst roles.
 
-                <span className="font-bold">🤖 ML & Analytics:</span>
+                <span className="font-bold">ML & Analytics:</span>
                 Basic experience with scikit-learn, TensorFlow, and Jupyter Notebooks for data processing, model building, and visualization.
 
-                <span className="font-bold">✅ Strengths:</span>
+                <span className="font-bold">Strengths:</span>
                 • Modern frontend tech stack
                 • Familiarity with data tools and visualization platforms
                 • Strong mix of UI and analytical thinking
@@ -300,38 +318,54 @@ const Results = () => {
             
             <div className="flex items-start space-x-2">
               <Checkbox 
-                id="companies"
+                id="showCompanies"
                 checked={showCompanies}
                 onCheckedChange={(checked) => {
                   if (typeof checked === 'boolean') {
                     setShowCompanies(checked);
+                    if (!checked) {
+                      setSelectedCompanies([]);
+                    }
                   }
                 }}
               />
               <div className="grid gap-1.5 leading-none">
                 <label
-                  htmlFor="companies"
+                  htmlFor="showCompanies"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
                   Show companies hiring for matching skills
                 </label>
-                <p className="text-sm text-muted-foreground">
-                  View companies currently hiring for your skill set
-                </p>
               </div>
             </div>
 
             {showCompanies && (
               <div className="mt-4 p-4 bg-secondary/50 rounded-lg">
-                <h4 className="font-medium mb-2">Matching Companies</h4>
-                <ul className="space-y-2">
-                  {getMatchingCompanies().map((company, index) => (
-                    <li key={index} className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-primary" />
-                      <span>{company.name} – {company.location}</span>
-                    </li>
+                <h4 className="font-medium mb-3">Available Companies</h4>
+                <div className="space-y-3">
+                  {companies.map((company) => (
+                    <div key={company.name} className="flex items-center space-x-2">
+                      <Checkbox 
+                        id={`company-${company.name}`}
+                        checked={selectedCompanies.includes(company.name)}
+                        onCheckedChange={() => handleCompanySelect(company.name)}
+                      />
+                      <label htmlFor={`company-${company.name}`} className="text-sm">
+                        {company.name} – {company.location} ({company.role})
+                      </label>
+                    </div>
                   ))}
-                </ul>
+                </div>
+                {showCompanies && (
+                  <Button 
+                    className="mt-4"
+                    onClick={handleSendEmail}
+                    disabled={selectedCompanies.length === 0}
+                  >
+                    <Mail className="mr-2 h-4 w-4" />
+                    Send Resume
+                  </Button>
+                )}
               </div>
             )}
           </CardContent>
