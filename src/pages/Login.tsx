@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
-import { ArrowLeft, LogIn, LockKeyhole, UserCog } from "lucide-react";
+import { ArrowLeft, LockKeyhole, UserCog } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Login = () => {
@@ -41,8 +41,8 @@ const Login = () => {
       localStorage.setItem("userRole", "admin");
       
       toast({
-        title: "Admin Login Successful",
-        description: "Welcome back, Admin!",
+        title: "Login Successful",
+        description: "Welcome to ResumeLens.AI Admin Portal",
         variant: "default",
       });
       
@@ -50,7 +50,7 @@ const Login = () => {
     } catch (error) {
       toast({
         title: "Login Failed",
-        description: "Invalid admin credentials. Please try again.",
+        description: "Invalid credentials. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -78,12 +78,12 @@ const Login = () => {
         <form onSubmit={handleAdminLogin}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="admin-email">Admin Email</Label>
+              <Label htmlFor="admin-email">HR Email</Label>
               <Input
                 id="admin-email"
                 name="email"
                 type="email"
-                placeholder="admin@example.com"
+                placeholder="hr@company.com"
                 required
                 value={adminCredentials.email}
                 onChange={handleAdminInputChange}
@@ -92,7 +92,7 @@ const Login = () => {
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="admin-password">Admin Password</Label>
+                <Label htmlFor="admin-password">Password</Label>
                 <Button variant="link" className="px-0 h-auto text-xs">
                   Forgot password?
                 </Button>
@@ -119,7 +119,7 @@ const Login = () => {
               ) : (
                 <span className="flex items-center">
                   <UserCog className="mr-2 h-4 w-4" />
-                  Admin Sign In
+                  HR Sign In
                 </span>
               )}
             </Button>

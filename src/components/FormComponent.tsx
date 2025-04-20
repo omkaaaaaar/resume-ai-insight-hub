@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -31,7 +30,6 @@ const FormComponent = () => {
       [name]: value
     });
     
-    // Clear error when user types
     if (errors[name]) {
       setErrors({
         ...errors,
@@ -44,7 +42,6 @@ const FormComponent = () => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       
-      // Validate file type
       if (file.type !== 'application/pdf') {
         setErrors({
           ...errors,
@@ -119,24 +116,18 @@ const FormComponent = () => {
         formDataToSend.append('resume', resume);
       }
       
-      // In a real application, this would send the data to your API
-      // For now, we'll simulate a successful response with a delay
-      
       setTimeout(() => {
-        // Simulated successful response
         toast({
           title: "Success!",
           description: "Your resume has been submitted for analysis.",
           variant: "default"
         });
         
-        // Store the form data in localStorage to access in the Results page
         localStorage.setItem('resumeData', JSON.stringify({
           ...formData,
           resumeText: "This is simulated parsed resume text since we can't actually upload files in this demo. In a real application, this would be the parsed text from your resume PDF."
         }));
         
-        // Navigate to the results page
         navigate('/results');
       }, 1500);
       
@@ -156,7 +147,7 @@ const FormComponent = () => {
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/30 py-12 px-4">
       <div className="max-w-3xl mx-auto">
         <div className="fade-in text-center mb-12">
-          <h1 className="text-4xl font-bold text-primary mb-2">Resume Analyzer</h1>
+          <h1 className="text-4xl font-bold text-primary mb-2">ResumeLens.AI</h1>
           <p className="text-lg text-muted-foreground">
             Upload your resume and get professional feedback and insights
           </p>
@@ -172,7 +163,7 @@ const FormComponent = () => {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  placeholder="John Doe"
+                  placeholder="Enter your full name"
                   className={errors.name ? "border-destructive" : ""}
                 />
                 {errors.name && (
@@ -191,7 +182,7 @@ const FormComponent = () => {
                   type="email"
                   value={formData.email}
                   onChange={handleChange}
-                  placeholder="johndoe@example.com"
+                  placeholder="you@example.com"
                   className={errors.email ? "border-destructive" : ""}
                 />
                 {errors.email && (
@@ -209,7 +200,7 @@ const FormComponent = () => {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  placeholder="(123) 456-7890"
+                  placeholder="+91 your phone number"
                   className={errors.phone ? "border-destructive" : ""}
                 />
                 {errors.phone && (
@@ -227,7 +218,7 @@ const FormComponent = () => {
                   name="linkedin"
                   value={formData.linkedin}
                   onChange={handleChange}
-                  placeholder="https://linkedin.com/in/johndoe"
+                  placeholder="https://linkedin.com/in/your-profile"
                   className={errors.linkedin ? "border-destructive" : ""}
                 />
                 {errors.linkedin && (
@@ -245,7 +236,7 @@ const FormComponent = () => {
                   name="github"
                   value={formData.github}
                   onChange={handleChange}
-                  placeholder="https://github.com/johndoe"
+                  placeholder="https://github.com/your-username"
                   className={errors.github ? "border-destructive" : ""}
                 />
                 {errors.github && (
