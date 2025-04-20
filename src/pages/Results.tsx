@@ -31,11 +31,10 @@ const Results = () => {
     content: 85,
     keywords: 89,
     recommendations: [
-      "Consider adding specific metrics to quantify your achievements",
-      "Highlight leadership experiences with concrete examples",
-      "Include certifications and professional development activities",
-      "Enhance your technical skills section with emerging technologies",
-      "Add a brief professional summary to showcase your career objectives"
+      "Deepen ML expertise by learning TensorFlow or PyTorch",
+      "Work on real-world ML projects or Kaggle competitions to enhance portfolio",
+      "Improve backend familiarity (e.g., Node.js, Express, or Django) for full-stack readiness",
+      "Consider contributing to open-source or building a personal project that combines frontend + ML"
     ]
   };
 
@@ -101,8 +100,8 @@ const Results = () => {
         </div>
         
         <div className="fade-in text-center mb-12">
-          <h1 className="text-4xl font-bold text-gradient-glow mb-2">
-            ResumeLens.AI Analysis Results
+          <h1 className="text-4xl font-bold mb-2">
+            Resume Analysis Results
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Our AI has analyzed your resume. Here's a detailed breakdown of your professional profile.
@@ -207,7 +206,17 @@ const Results = () => {
               <CardDescription>Extracted from your uploaded resume</CardDescription>
             </CardHeader>
             <CardContent className="max-h-60 overflow-y-auto custom-scrollbar">
-              <p className="whitespace-pre-wrap text-sm">{data?.resumeText || "No resume content available"}</p>
+              <p className="whitespace-pre-wrap text-sm">💯 Overall Score: 87%
+
+🛠️ Core Skills:
+Omkar showcases a solid foundation in frontend development with expertise in Python, React, JavaScript, TypeScript, Tailwind CSS, and related modern web technologies. His proficiency positions him well for frontend or full-stack development roles.
+
+🤖 Machine Learning (Entry-Level):
+In addition to frontend development, Omkar has introduced himself to machine learning with foundational skills in:
+• NumPy, Pandas for data manipulation
+• scikit-learn for basic ML models
+• Matplotlib, Seaborn for data visualization
+• Jupyter Notebooks for interactive experimentation</p>
             </CardContent>
           </Card>
           
