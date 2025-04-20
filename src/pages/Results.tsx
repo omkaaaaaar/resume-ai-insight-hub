@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,25 +21,22 @@ const Results = () => {
   const [loading, setLoading] = useState(true);
   const [sendToRecruiters, setSendToRecruiters] = useState(false);
   const [consentToLinkedIn, setConsentToLinkedIn] = useState(false);
+  const [showCompanies, setShowCompanies] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   
-  // Updated scores and recommendations
   const scores = {
     overall: 87,
     format: 92,
     content: 85,
     keywords: 89,
     recommendations: [
-      "Deepen ML expertise by learning TensorFlow or PyTorch",
-      "Work on real-world ML projects or Kaggle competitions to enhance portfolio",
-      "Improve backend familiarity (e.g., Node.js, Express, or Django) for full-stack readiness",
-      "Consider contributing to open-source or building a personal project that combines frontend + ML"
+      "Advance ML skills (e.g., TensorFlow projects)",
+      "Build real-world data dashboards",
+      "Improve backend knowledge for full-stack capabilities"
     ]
   };
 
   useEffect(() => {
-    // In a real app, we would fetch data from the API
-    // For now, we'll get it from localStorage
     const fetchData = async () => {
       try {
         const storedData = localStorage.getItem('resumeData');
@@ -65,7 +61,6 @@ const Results = () => {
   const handleSubmit = () => {
     setRefreshing(true);
     
-    // Simulate API call
     setTimeout(() => {
       toast({
         title: "Preferences Updated",
@@ -76,6 +71,13 @@ const Results = () => {
       });
       setRefreshing(false);
     }, 1500);
+  };
+
+  const getMatchingCompanies = () => {
+    const companies = [];
+    companies.push({ name: "TCS", location: "Navi Mumbai", role: "Data Analyst" });
+    companies.push({ name: "Wipro", location: "Gurgaon", role: "Frontend Developer" });
+    return companies;
   };
 
   if (loading) {
@@ -206,17 +208,20 @@ const Results = () => {
               <CardDescription>Extracted from your uploaded resume</CardDescription>
             </CardHeader>
             <CardContent className="max-h-60 overflow-y-auto custom-scrollbar">
-              <p className="whitespace-pre-wrap text-sm">💯 Overall Score: 87%
+              <p className="whitespace-pre-wrap text-sm">
+                <span className="font-bold">💯 Overall Score: 87%</span>
 
-🛠️ Core Skills:
-Omkar showcases a solid foundation in frontend development with expertise in Python, React, JavaScript, TypeScript, Tailwind CSS, and related modern web technologies. His proficiency positions him well for frontend or full-stack development roles.
+                <span className="font-bold">🛠️ Core Skills:</span>
+                Omkar is skilled in React, JavaScript, TypeScript, Tailwind CSS, and Python, making him a strong frontend candidate. He also holds relevant data skills like MongoDB, Power BI, NumPy, and Pandas, suitable for entry-level Data Analyst roles.
 
-🤖 Machine Learning (Entry-Level):
-In addition to frontend development, Omkar has introduced himself to machine learning with foundational skills in:
-• NumPy, Pandas for data manipulation
-• scikit-learn for basic ML models
-• Matplotlib, Seaborn for data visualization
-• Jupyter Notebooks for interactive experimentation</p>
+                <span className="font-bold">🤖 ML & Analytics:</span>
+                Basic experience with scikit-learn, TensorFlow, and Jupyter Notebooks for data processing, model building, and visualization.
+
+                <span className="font-bold">✅ Strengths:</span>
+                • Modern frontend tech stack
+                • Familiarity with data tools and visualization platforms
+                • Strong mix of UI and analytical thinking
+              </p>
             </CardContent>
           </Card>
           
@@ -292,6 +297,43 @@ In addition to frontend development, Omkar has introduced himself to machine lea
                 </p>
               </div>
             </div>
+            
+            <div className="flex items-start space-x-2">
+              <Checkbox 
+                id="companies"
+                checked={showCompanies}
+                onCheckedChange={(checked) => {
+                  if (typeof checked === 'boolean') {
+                    setShowCompanies(checked);
+                  }
+                }}
+              />
+              <div className="grid gap-1.5 leading-none">
+                <label
+                  htmlFor="companies"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Show companies hiring for matching skills
+                </label>
+                <p className="text-sm text-muted-foreground">
+                  View companies currently hiring for your skill set
+                </p>
+              </div>
+            </div>
+
+            {showCompanies && (
+              <div className="mt-4 p-4 bg-secondary/50 rounded-lg">
+                <h4 className="font-medium mb-2">Matching Companies</h4>
+                <ul className="space-y-2">
+                  {getMatchingCompanies().map((company, index) => (
+                    <li key={index} className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                      <span>{company.name} – {company.location}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </CardContent>
           <CardFooter>
             <Button onClick={handleSubmit} disabled={refreshing}>
