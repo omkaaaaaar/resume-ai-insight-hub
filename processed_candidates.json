@@ -1,0 +1,52 @@
+
+
+{
+    
+    "top_matching_companies": [
+        {
+            "Company": "Wipro",
+            "Branch": "Gurgaon",
+            "Role": "Frontend Developer",
+            "Skills": "C++, Git, TensorFlow, MongoDB, Power BI, PyTorch",
+            "Experience": 0,
+            "Email": "patkar.omkar.ds@kgce.edu.in",
+            "gte_match_score": 0.89
+        },
+        {
+            "Company": "Zoho Corp",
+            "Branch": "Bangalore",
+            "Role": "Data Engineer",
+            "Skills": "LLMs, Docker, Rust, Tailwind CSS, Node.js, Java, OpenCV",
+            "Experience": 0,
+            "Email": "sutar.nikhil.ds@kgce.edu.in",
+            "gte_match_score": 0.78
+        },
+        {
+            "Company": "Mindtree",
+            "Branch": "Noida",
+            "Role": "Machine Learning Engineer",
+            "Skills": "Java, TensorFlow, Scikit-Learn, OpenCV, Excel",
+            "Experience": 0,
+            "Email": "khandagale.aditya.dseit@kgce.edu.in",
+            "gte_match_score": 0.78
+        },
+        {
+            "Company": "Tech Mahindra",
+            "Branch": "Delhi",
+            "Role": "Machine Learning Engineer",
+            "Skills": "LLMs, React, Transformers, Bootstrap, Java",
+            "Experience": 0,
+            "Email": "alampawan30@gmail.com",
+            "gte_match_score": 0.78
+        },
+        {
+            "Company": "Mindtree",
+            "Branch": "Bangalore",
+            "Role": "ML Ops Specialist",
+            "Skills": "React, PyTorch, Flask, Excel, PostgreSQL",
+            "Experience": 4,
+            "Email": "khandagale.aditya.dseit@kgce.edu.in",
+            "gte_match_score": 0.78
+        }
+    ]
+}
